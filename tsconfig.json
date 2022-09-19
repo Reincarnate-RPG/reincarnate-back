@@ -42,6 +42,7 @@
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "baseUrl": "./src",
+    "outDir": "./public",
     "paths": {
       "@/entities/*": ["entities/*"],
       "@/middlewares/*": ["middlewares/*"],
