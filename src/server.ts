@@ -10,7 +10,7 @@ connect(
 )
   .then(() => {
     console.log('⚡️ Connected at MongoDB ⚡️');
-    app.listen(port, () => {
+    app.listen(port || 3333, () => {
       console.log(
         `⚡️[server]: Server is running at https://localhost:${port}`
       );
