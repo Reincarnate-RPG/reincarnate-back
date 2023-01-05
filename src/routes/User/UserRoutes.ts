@@ -20,11 +20,32 @@ router.post('/auth/refresh-token', (res, req) => {
 });
 
 router.get('/user', checkToken, async (req: Request, res: Response) => {
+  const users = await User.find().select('-password');
+
+  if (!users) {
+    return res.status(422).json({ message: 'Nenhum usuário encontrado!' });
+  }
+
   try {
-    const user = await User.find().select('-password');
-    res.status(200).json({ user });
+    return res.status(200).json(users);
   } catch (err) {
-    res.status(500).json({ error: err });
+    return res.status(500).json({ error: err });
+  }
+});
+
+router.get('/user/:id', checkToken, async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const user = await User.findById(id, ['-password', '-_id']);
+
+  console.log(user);
+
+  if (!user) {
+    return res.status(422).json({ message: 'O usuário não foi encontrado!' });
+  }
+  try {
+    return res.status(200).json(user);
+  } catch (err) {
+    return res.status(500).json({ error: err });
   }
 });
 

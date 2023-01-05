@@ -28,8 +28,11 @@ export class MongoUsersRepository implements IUsersRepository {
 
     const generateRefreshToken = new RefreshTokenProvider();
     const refreshToken = await generateRefreshToken.generateToken(user._id);
-
-    return { token, refreshToken };
+    return {
+      token,
+      refreshToken,
+      user: { name: user.name, email: user.email }
+    };
   }
 
   async findByEmail(email: string): Promise<IUser> {

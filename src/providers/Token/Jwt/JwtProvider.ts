@@ -5,11 +5,12 @@ export class JwtProvider {
     const secret = process.env.SECRET!;
     const token = sign(
       {
-        id: userId
+        id: userId,
+        isAuthenticated: true
       },
       secret,
       {
-        expiresIn: '30s'
+        expiresIn: '1h'
       }
     );
 

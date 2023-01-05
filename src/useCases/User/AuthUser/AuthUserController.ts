@@ -18,9 +18,7 @@ export class AuthUserController {
       await this.authUserUseCase.execute(user).then(token => {
         jwt = token;
       });
-      return res.status(201).json({
-        token: jwt
-      });
+      return res.status(201).json(jwt);
     } catch (err: any) {
       console.log(err);
       return res.status(400).json({
