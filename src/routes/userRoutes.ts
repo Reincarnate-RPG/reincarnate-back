@@ -55,14 +55,12 @@ router.post('/login', async (req: Request, res: Response) => {
 
   const user = await User.findOne({ email: email });
   if (!user) {
-    res.status(404).json({ message: 'Usuário não cadastrado!' });
-    return;
+    return res.status(404).json({ message: 'Usuário não cadastrado!' });
   }
 
   const checkPassword = await bcrypt.compare(password, user.password);
   if (!checkPassword) {
-    res.status(422).json({ message: 'Senha inválida!' });
-    return;
+    return res.status(422).json({ message: 'Senha inválida!' });
   }
 
   try {

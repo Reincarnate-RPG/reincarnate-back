@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 
 export class RefreshTokenProvider implements IRefreshTokenProvider {
   async generateToken(userId: string): Promise<IRefreshToken> {
-    const expiresIn = dayjs().add(15, 'second').unix();
+    const expiresIn = dayjs().add(300, 'second').unix();
     const refreshToken = <IRefreshToken>{
       userId: userId,
       expiresIn: expiresIn
