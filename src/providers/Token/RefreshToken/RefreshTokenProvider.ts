@@ -1,29 +1,34 @@
 import { IRefreshTokenProvider } from './RefreshTokenProvider.d';
-import { IRefreshToken } from '@/entities/RToken/RefreshToken.d';
-import {
-  RefreshToken,
-  RefreshTokenModel
-} from '@/entities/RToken/RefreshToken';
 import dayjs from 'dayjs';
 
+import { prisma } from '../../../prisma/prisma';
+import { RefreshToken } from '@prisma/client';
+
 export class RefreshTokenProvider implements IRefreshTokenProvider {
-  async generateToken(userId: string): Promise<IRefreshToken> {
+  async generateToken(userId: string): Promise<RefreshToken> {
     const expiresIn = dayjs().add(300, 'second').unix();
-    const refreshToken = <IRefreshToken>{
-      userId: userId,
-      expiresIn: expiresIn
-    };
-    const generateRefreshToken = await RefreshToken.create(refreshToken);
+
+    console.log('~~');
+    console.log(userId);
+    console.log(expiresIn);
+
+    const generateRefreshToken = await prisma.refreshToken.create({
+      data: { expiresIn: expiresIn, userId: userId }
+    });
     return generateRefreshToken!;
   }
 
-  async findToken(refreshTokenId: string): Promise<IRefreshToken> {
-    const token = await RefreshToken.findById(refreshTokenId);
+  async findToken(refreshTokenId: string): Promise<RefreshToken> {
+    const token = await prisma.refreshToken.findUnique({
+      where: {
+        id: refreshTokenId
+      }
+    });
 
     return token!;
   }
 
-  async isExpired(refreshToken: IRefreshToken): Promise<boolean> {
+  async isExpired(refreshToken: RefreshToken): Promise<boolean> {
     const refreshTokenExpired = dayjs().isAfter(
       dayjs.unix(refreshToken.expiresIn)
     );
@@ -32,6 +37,10 @@ export class RefreshTokenProvider implements IRefreshTokenProvider {
   }
 
   async removeTokens(userId: string): Promise<void> {
-    await RefreshToken.deleteMany({ userId: userId });
+    await prisma.refreshToken.deleteMany({
+      where: {
+        userId: userId
+      }
+    });
   }
 }

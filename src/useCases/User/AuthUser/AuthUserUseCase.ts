@@ -1,8 +1,8 @@
-import { IUsersRepository } from '@/repositories/User/IUsersRepository';
+import { IUserRepository } from '@/repositories/User/IUserRepository';
 import { IAuthUserRequestDTO } from './AuthUserDTO';
 
 export class AuthUserUseCase {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(private usersRepository: IUserRepository) {}
   async execute({ email, password }: IAuthUserRequestDTO): Promise<string> {
     return await this.usersRepository
       .authUser(email, password)

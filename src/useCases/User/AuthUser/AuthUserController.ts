@@ -6,7 +6,7 @@ export class AuthUserController {
   constructor(private authUserUseCase: AuthUserUseCase) {}
 
   async handle(req: Request, res: Response): Promise<Response> {
-    const { email, password } = req.body;
+    const { email, password } = req.body as { email: string; password: string };
 
     const user = <IAuthUserRequestDTO>{
       email: email,

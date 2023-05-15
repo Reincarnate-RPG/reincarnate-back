@@ -1,4 +1,4 @@
-import { User } from '../entities/User/User';
+/* import { User } from '../entities/User/User';
 import { Request, Router, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -145,3 +145,4 @@ router.delete('/:id', async (req: Request, res: Response) => {
   }
 });
 export default router;
+ */

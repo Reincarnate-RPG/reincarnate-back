@@ -1,0 +1,322 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// generator erd {
+//   provider = "prisma-erd-generator"
+// }
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// https://d2slcw3kip6qmk.cloudfront.net/marketing/pages/chart/erd-symbols/ERD-Notation.PNG
+// https://prisma-erd.simonknott.de
+
+model User {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  email        String        @unique
+  name         String
+  password     String
+  refreshToken RefreshToken?
+  profile      Profile[]
+  createdAt    DateTime      @default(now())
+  updateddAt   DateTime      @updatedAt
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  user      User   @relation(fields: [userId], references: [id])
+  userId    String @unique @db.ObjectId
+  expiresIn Int
+
+  @@map("refresh_tokens")
+}
+
+model World {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  roles       String[]  @default(["Owner", "Player"])
+  createdAt   DateTime  @default(now())
+  updateddAt  DateTime  @updatedAt
+  members     Profile[]
+
+  @@map("worlds")
+}
+
+model Profile {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  role        String
+
+  userId  String @db.ObjectId
+  user    User   @relation(fields: [userId], references: [id])
+  worldId String @db.ObjectId
+  world   World  @relation(fields: [worldId], references: [id])
+
+  @@unique([id, role])
+  @@map("profiles")
+}
+
+model Character {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  title        String
+  type         String
+  alignment    String
+  age          String
+  gender       String
+  location     String?
+  race         String?
+  organization String?
+  family       String?
+  tag          String[]
+  personality  String[]
+  appearance   String[]
+  attribute    String[]
+  description  String?
+  isDead       Boolean  @default(false)
+  isPrivate    Boolean  @default(false)
+
+  @@map("characters")
+}
+
+model Type {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+
+  @@map("types")
+}
+
+model Personality {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+
+  @@map("personalities")
+}
+
+model Appearance {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+
+  @@map("appearances")
+}
+
+model Location {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  parentLocation String
+  type           String
+  description    String
+  tag            String[]
+  isPrivate      Boolean
+  attribute      String[]
+
+  @@map("locations")
+}
+
+model Map {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  parentMap   String
+  type        String
+  location    String
+  description String
+  isPrivate   Boolean
+  attribute   String[]
+
+  @@map("maps")
+}
+
+model Organization {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  parentOrganization String
+  type               String
+  location           String
+  description        String
+  members            String[]
+  tag                String[]
+  defunct            Boolean
+  isPrivate          Boolean
+  attribute          String[]
+
+  @@map("organizations")
+}
+
+model Family {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  parentFamily String
+  type         String
+  location     String
+  description  String
+  members      String[]
+  tag          String[]
+  isPrivate    Boolean
+  attribute    String[]
+
+  @@map("families")
+}
+
+model Calendar {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  @@map("calendars")
+}
+
+model Timeline {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  parentTimeline String
+  type           String
+  description    String
+  tag            String[]
+  isPrivate      Boolean
+  attribute      String[]
+
+  @@map("timelines")
+}
+
+model Creature {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  parentCreature String
+  type           String
+  locations      String[]
+  description    String
+  tag            String[]
+  isPrivate      Boolean
+  attribute      String[]
+
+  @@map("creatures")
+}
+
+model Race {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  parentRace  String
+  type        String
+  locations   String[]
+  description String
+  tag         String[]
+  isPrivate   Boolean
+  attribute   String[]
+
+  @@map("races")
+}
+
+model Campaign {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  quests      String[]
+  journals    String[]
+  items       String[]
+  events      String[]
+  abilities   String[]
+  description String
+  players     String[]
+  tag         String[]
+  isPrivate   Boolean
+  attribute   String[]
+
+  @@map("campaings")
+}
+
+model Quest {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  parentQuest String
+  type        String
+  character   String
+  date        String
+  calendar    String
+  description String
+  tag         String[]
+  isCompleted Boolean
+  isPrivate   Boolean
+  attribute   String[]
+
+  @@map("quests")
+}
+
+model Journal {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  parentJournal String
+  type          String
+  date          String
+  calendar      String
+  location      String
+  author        String
+  description   String
+  tag           String[]
+  isPrivate     Boolean
+  attribute     String[]
+
+  @@map("journals")
+}
+
+model Item {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  parentItem  String
+  type        String
+  location    String
+  price       Int
+  size        Int
+  description String
+  tag         String[]
+  isPrivate   Boolean
+  attribute   String[]
+
+  @@map("items")
+}
+
+model Event {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  parentEvent String
+  type        String
+  location    String
+  date        String
+  description String
+  tag         String[]
+  isPrivate   Boolean
+  attribute   String[]
+
+  @@map("events")
+}
+
+model Ability {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  parentAbility String
+  type          String
+  charges       String
+  description   String
+  tag           String[]
+  isPrivate     Boolean
+  attribute     String[]
+
+  @@map("abilities")
+}
+
+model Tag {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  type        String
+  parentTag   String
+  color       String
+  description String
+  isPrivate   Boolean
+
+  @@map("tags")
+}

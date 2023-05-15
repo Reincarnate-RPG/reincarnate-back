@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ICreateUserRequestDTO } from './CreateUserDTO';
+import { CreateUserRequestDTO } from './CreateUserDTO';
 import { CreateUserUseCase } from './CreateUserUseCase';
 
 export class CreateUserController {
@@ -8,7 +8,7 @@ export class CreateUserController {
   async handle(req: Request, res: Response): Promise<Response> {
     const { name, email, password } = req.body;
 
-    const user = <ICreateUserRequestDTO>{
+    const user = <CreateUserRequestDTO>{
       name: name,
       email: email,
       password: password

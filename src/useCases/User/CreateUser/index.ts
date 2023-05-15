@@ -1,16 +1,16 @@
 import { MailtrapMailProvider } from '@/providers/Mail/MailtrapMailProvider';
-import { MongoUsersRepository } from '@/repositories/User/MongoUsersRepository';
+import { MongoUserRepository } from '@/repositories/User/MongoUserRepository';
 import { CreateUserController } from './CreateUserController';
 import { CreateUserUseCase } from './CreateUserUseCase';
 
 const mailtrapMailProvider = new MailtrapMailProvider();
-const mongoUsersRepository = new MongoUsersRepository();
+const mongoUserRepository = new MongoUserRepository();
 
 const createUserUseCase = new CreateUserUseCase(
-  mongoUsersRepository,
+  mongoUserRepository,
   mailtrapMailProvider
 );
 
 const createUserController = new CreateUserController(createUserUseCase);
 
-export { CreateUserUseCase, createUserController };
+export { createUserController };

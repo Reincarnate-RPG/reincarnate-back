@@ -1,10 +1,10 @@
-import { MongoUsersRepository } from '@/repositories/User/MongoUsersRepository';
+import { MongoUserRepository } from '@/repositories/User/MongoUserRepository';
 import { AuthUserController } from './AuthUserController';
 import { AuthUserUseCase } from './AuthUserUseCase';
 
-const mongoUsersRepository = new MongoUsersRepository();
+const mongoUserRepository = new MongoUserRepository();
 
-const authUserUseCase = new AuthUserUseCase(mongoUsersRepository);
+const authUserUseCase = new AuthUserUseCase(mongoUserRepository);
 
 const authUserController = new AuthUserController(authUserUseCase);
 
